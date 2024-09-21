@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  web:
+    depends_on:
+      - db
+    build: .
+    command: >
+      sh -c "python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      DEBUG: "1"  # Set to "0" for production
+      DB_NAME: "postges_admin"
+      DB_USER: "postgres"
+      DB_PASSWORD: "Radhe@1234#"
+      DB_HOST: "db"  # Use 'db' as the host for PostgreSQL
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: "postges_admin"  # Database name
+      POSTGRES_USER: "postgres"  # Database user
+      POSTGRES_PASSWORD: "Radhe"  # Database password
+volumes:
+  db_data:  # Persist the database data
