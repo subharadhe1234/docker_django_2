@@ -4,10 +4,11 @@ import json
 from firebase_admin import firestore,db,storage
 from django.views.decorators.csrf import csrf_exempt
 import jwt
-import datetime
+from datetime import datetime
 from django.contrib.auth.models import User,Group
 from rest_framework import routers, serializers, viewsets,generics,status
-from .serializers import UserSerializer,GroupSerializer
+from .serializers import UserSerializer
+from .models import ExampleModel 
 from rest_framework.response import Response
 # Firebase Firestore client initialization
 firestore_client = firestore.client()
@@ -15,6 +16,84 @@ from rest_framework.views import APIView
 # doc_ref = firestore.collection("users")
 
 # realtime database initialization
+
+
+
+# from rest_framework.decorators import api_view
+# from rest_framework.response import Response
+# from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
+# from rest_framework.decorators import permission_classes
+# from rest_framework.permissions import AllowAny
+
+# # from rest_framework.renderers import JSONRenderer
+# # import io
+# from rest_framework.parsers import JSONParser
+
+
+
+# class Comment:
+#     def __init__(self,email,content,created=None) :
+#         self.email = email
+#         self.content = content
+#         self.created = created or datetime.now()
+
+
+
+
+
+
+# @api_view(['GET','POST','PUT','DELETE'])
+# @permission_classes([AllowAny])  # Optional: Add permission class if needed
+# def admin(request):  # Corrected parameter name
+
+
+# # .=====================GET=================
+#     if request.method=='GET':
+#         data = {
+#             'name': 'radhe',
+#             'age': ['14', '45', '78', '10'],
+#             'pos': 'krishna'
+#         }
+        
+#         comment =Comment(email="Radhe@gmail.com",content="hare krishna")
+#         serializers=CommentSelizer(comment)
+#         data =serializers.data
+
+#         json = JSONRenderer().render(data)
+#         stream = io.BytesIO(json)
+#         parse = JSONParser().parse(stream)
+#         srl=CommentSelizer(data=parse)
+#         srl.is_valid()
+#         val_data=srl.validated_data
+#         # cret_data=serializers.create(validated_data=val_data)
+#         # print(cret_data)
+
+#         print(val_data)
+#         return Response(parse)
+    
+# # .=====================POST=================
+#     elif request.method == 'POST':
+#         data=request.data
+#         return Response({'result':'this is the POST requrest'})
+    
+
+# # .=====================PUT=================
+#     elif request.method == 'PUT':
+#         return Response({'result':'this is the PUT requrest'})
+    
+
+# # .=====================DELET=================
+#     elif request.method == 'DELETE':
+#         return Response({'result':'this is the DELETE requrest'})
+
+
+
+
+
+
+
+
+
 
 
 
@@ -64,21 +143,26 @@ def encription(requrest):
     
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(generics.ListCreateAPIView):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = User.objects.all().order_by('-date_joined')
+    queryset = ExampleModel.objects.all()
     serializer_class = UserSerializer
     # lookup_field = "pk"
     # permission_classes = [permissions.IsAuthenticated]
 
 
-class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Group.objects.all().order_by('name')
-    serializer_class = GroupSerializer
-    lookup_field = "pk"
+# class GroupViewSet(viewsets.ModelViewSet):
+#     """
+#     API endpoint that allows groups to be viewed or edited.
+#     """
+#     queryset = Group.objects.all().order_by('name')
+#     serializer_class = GroupSerializer
+#     lookup_field = "pk"
     # permission_classes = [permissions.IsAuthenticated]
+
+
+
+
+

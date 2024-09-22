@@ -1,4 +1,4 @@
-version: '3.8'
+# version: '3.8'
 
 services:
   web:
@@ -10,21 +10,29 @@ services:
       python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
+    env_file:
+      - .env  # Ensure you have a .env file with your environment variables
     ports:
       - "8000:8000"
     environment:
       DEBUG: "1"  # Set to "0" for production
-      DB_NAME: "postges_admin"
-      DB_USER: "postgres"
-      DB_PASSWORD: "Radhe@1234#"
-      DB_HOST: "db"  # Use 'db' as the host for PostgreSQL
+      DB_NAME: "krishna"  # Ensure this matches your POSTGRES_DB
+      DB_USER: "postgres"  # Ensure this matches your POSTGRES_USER
+      DB_PASSWORD: "Radhe"  # Ensure this matches your POSTGRES_PASSWORD
+      DB_HOST: "db"  # Host should be 'db' for Docker network access
+
   db:
-    image: postgres
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: "postges_admin"  # Database name
+      POSTGRES_DB: "krishna"  # Database name
       POSTGRES_USER: "postgres"  # Database user
       POSTGRES_PASSWORD: "Radhe"  # Database password
+      POSTGRES_LOG_STATEMENT: "all"  # Logs all SQL statements
+      POSTGRES_LOG_CONNECTIONS: "on"  # Logs connection attempts
+
 volumes:
-  db_data:  # Persist the database data
+  postgres_data:  # Ensure consistency in volume naming
